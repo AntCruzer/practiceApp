@@ -24,20 +24,6 @@ const userController = {
     }
   },
 
-  // Handle POST /users
-  // createUser: async (req, res) => {
-  //   try {
-  //     // Validate Input
-  //     if (!req.body.name || !req.body.email) {
-  //       return res.status(400).json({ error: 'Missing fields' });
-  //     }
-  //     const newId = await User.create(req.body.name, req.body.email);
-  //     res.status(201).json({ id: newId, message: 'User created' });
-  //   } catch (err) {
-  //     res.status(500).json({ error: err.message });
-  //   }
-  // }
-
   // Handle POST /users (CREATES AND ADDS A NEW USER TO TABLE)
     createUser: async (req, res) => {
 
@@ -76,17 +62,83 @@ const userController = {
         const user = await User.findByEmail(email);
         if (!user) return res.status(404).json({ error: "User not found"});
 
+        // // EMAIL MATCHES STORED PASSWORD
+        // const isMatch = await bcrypt.compare(password, user.password);
+        
+        // // if (!isMatch) res.status(400).json({ error: "Invalid Credentials"});
+        // if (!isMatch) return res.status(400).json({ error: "Invalid Credentials" });
+
+
+        // // ASSIGN WEB TOKEN
+        // // const token = jwt.sign({id: user.email }, process.env.JWT_SECRET, {expiresIn: '1h'});
+        // const token = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        // res.json({token});
+
         // EMAIL MATCHES STORED PASSWORD
         const isMatch = await bcrypt.compare(password, user.password);
-        if (!isMatch) res.status(400).json({ error: "Invalid Credentials"});
+        if (!isMatch) return res.status(400).json({ error: "Invalid Credentials" });
 
         // ASSIGN WEB TOKEN
-        const token = jwt.sign({id: user.email }, process.env.JWT_SECRET, {expiresIn: '1h'});
-        res.json({token});
+        const token = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        return res.json({ token });
 
       } catch (err){
       
         res.status(500).json({error: err.message});
+      }
+    },
+
+
+    // PUT /users/:id (UPDATES A USER)
+    updateUser: async (req, res) => {
+      try {
+        const id = Number(req.params.id);
+        if (!id) return res.status(400).json({ error: "Invalid ID" });
+
+        const { name, email, password } = req.body;
+
+        // BUILD UPDATES OBJECT
+        const updates = {};
+        if (name) updates.name = name;
+        if (email) updates.email = email;
+
+        // IF PASSWORD PROVIDED, HASH IT BEFORE UPDATING
+        if (password) {
+          const hash = await bcrypt.hash(password, 10);
+          updates.password = hash;
+        }
+
+        if (Object.keys(updates).length === 0) {
+          return res.status(400).json({ error: "Provide at least one field to update (name/email/password)" });
+        }
+
+        const affected = await User.updateById(id, updates);
+
+        if (affected === 0) {
+          return res.status(404).json({ error: "User not found (or nothing changed)" });
+        }
+
+        return res.status(200).json({ message: "User updated", id });
+      } catch (err) {
+        return res.status(500).json({ error: err.message });
+      }
+    },
+
+    // DELETE /users/:id (DELETES A USER)
+    deleteUser: async (req, res) => {
+      try {
+        const id = Number(req.params.id);
+        if (!id) return res.status(400).json({ error: "Invalid ID" });
+
+        const affected = await User.deleteById(id);
+
+        if (affected === 0) {
+          return res.status(404).json({ error: "User not found" });
+        }
+
+        return res.status(200).json({ message: "User deleted", id });
+      } catch (err) {
+        return res.status(500).json({ error: err.message });
       }
     }
 };

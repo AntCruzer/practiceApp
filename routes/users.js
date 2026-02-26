@@ -1,14 +1,3 @@
-/* OLD PLACEHOLDER CODE */
-// var express = require('express');
-// var router = express.Router();
-
-// /* GET users listing. */
-// router.get('/', function(req, res, next) {
-//   res.send('respond with a resource');
-// });
-
-// module.exports = router;
-
 // IDENTIFIERS AND IMPORTS
 const express = require('express');
 const router = express.Router();
@@ -18,16 +7,22 @@ const authenticateToken = require('../middleware/auth');
 
 /* MAP THE ENDPOINTS */
 
-// GET/READ - stored users
-// WEEK 6 - NOW WITH TOKEN CHECKER
-router.get('/', authenticateToken, userController.getAllUsers);
+// GET/READ - stored users (PROTECTED)
+router.get('/', authenticateToken, userController.getAllUsers); // WEEK 6 - NOW WITH TOKEN CHECKER
 
-// POST/CREATE - created User
+// POST/CREATE - create user (REGISTER)
 router.post('/', userController.createUser);
 
 // GET/READ - user login
-// router.post('/login', userController.login);
 router.get('/login', userController.login);
+// PREVIOUSLY: router.post('/login', userController.login);
 
 
+/* PHASE 1 ADDITIONS */
+
+// PUT/UPDATE - update user by id (PROTECTED)
+router.put('/:id', authenticateToken, userController.updateUser);
+
+// DELETE/REMOVE - delete user by id (PROTECTED)
+router.delete('/:id', authenticateToken, userController.deleteUser);
 module.exports = router;

@@ -6,7 +6,7 @@ var router = express.Router();
 const db = require('../config/database');
 
 
-// API ROUTES TO ENDPOINTS
+/* API ROUTES AND ENDPOINTS */
 
 /* GET home page. */
 router.get('/', function(req, res, next) {

@@ -1,4 +1,4 @@
-// MAIN SETUP FILE
+/* MAIN SETUP FILE */
 
 var express = require('express');
 var path = require('path');
