@@ -26,6 +26,8 @@ router.get('/', authenticateToken, userController.getAllUsers);
 router.post('/', userController.createUser);
 
 // GET/READ - user login
-router.post('/login', userController.login);
+// router.post('/login', userController.login);
+router.get('/login', userController.login);
+
 
 module.exports = router;
