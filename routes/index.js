@@ -1,7 +1,8 @@
 // EXPRESS
-
 var express = require('express');
 var router = express.Router();
+
+// DB IDENTIFIER
 const db = require('../config/database');
 
 
@@ -9,6 +10,8 @@ const db = require('../config/database');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
+
+  // IN JSON FORMAT, TEXT WILL BE DISPLAYED...
   res.json({
     status: 'success',
     message: 'Hello World! My API is live.',
@@ -18,6 +21,8 @@ router.get('/', function(req, res, next) {
 
 /* GET db test route */
 router.get('/db-test', async function(req, res, next) {
+
+  // TEST IF SIMPLE SQL CALCULATION QUERY PERFORMS
   try {
     const [rows] = await db.query('SELECT 1 + 1 AS result');
     res.json({
@@ -31,6 +36,8 @@ router.get('/db-test', async function(req, res, next) {
 
 /* GET test_table data */
 router.get('/my-data', async function(req, res, next) {
+
+  // TEST IF YOU CAN RETRIEVE DATA IN TEST_TABLE
   try {
     const [rows] = await db.query('SELECT * FROM test_table');
     res.json({
