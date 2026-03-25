@@ -14,8 +14,12 @@ router.get('/', authenticateToken, userController.getAllUsers); // WEEK 6 - NOW 
 router.post('/', userController.createUser);
 
 // GET/READ - user login
-router.get('/login', userController.login);
-// PREVIOUSLY: router.post('/login', userController.login);
+// router.get('/login', userController.login);
+
+// POST/LOGIN - user login
+router.post('/login', userController.login);
+
+
 
 
 /* PHASE 1 ADDITIONS */
