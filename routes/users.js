@@ -1,11 +1,14 @@
-// IDENTIFIERS AND IMPORTS
+// INCOMING REQUESTS HIT THIS FILE FIRST
+
+
+// IMPORTS
 const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/userController');
 const authenticateToken = require('../middleware/auth');
 
 
-/* MAP THE ENDPOINTS */
+/* MAPPED ENDPOINTS */
 
 // GET/READ - stored users (PROTECTED)
 router.get('/', authenticateToken, userController.getAllUsers); // WEEK 6 - NOW WITH TOKEN CHECKER
