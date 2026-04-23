@@ -1,7 +1,9 @@
 // BUSINESS LOGIC FOR TMDB PROXY OPERATIONS
 // KEEPS THE TMDB API KEY ON THE SERVER SIDE
 
-const TMDB_BASE_URL = process.env.TMDB_BASE_URL || 'https://api.themoviedb.org/3';
+// const TMDB_BASE_URL = process.env.TMDB_BASE_URL || 'https://api.themoviedb.org/3';
+const TMDB_BASE_URL = process.env.TMDB_BASE_URL || 'https://www.themoviedb.org/';
+
 
 /*
   HELPER: MAKES A REQUEST TO TMDB
